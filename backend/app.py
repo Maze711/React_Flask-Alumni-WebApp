@@ -22,3 +22,5 @@ def home():
 if __name__ == "__main__":
     run_react()  # Start React when Flask starts
     app.run(debug=True)
+
+# try lang boss
