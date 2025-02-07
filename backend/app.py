@@ -2,8 +2,7 @@ import subprocess
 import os
 from flask import Flask
 from flask_cors import CORS
-
-from config.config import Config
+from config.config import Config  # Import Config class
 
 app = Flask(__name__)
 CORS(app)
@@ -19,8 +18,9 @@ def run_react():
 
 @app.route("/")
 def home():
-    return {"message": "Flask is running!"}
+    alumni_ids = Config.fetch_alumni_ids()
+    return {"message": "Flask is running!", "alumni_ids": alumni_ids}
 
 if __name__ == "__main__":
-    run_react()  # Start React when Flask starts
+    run_react()
     app.run(debug=True)
