@@ -5,6 +5,7 @@ import { Dean } from './pages/admin/Dean';
 import { Home } from './pages/alumni/Home'
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast'; // for notification component
+import { AuthContextProvider } from './contexts/authContext';
 
 function App() {
 
@@ -12,7 +13,7 @@ function App() {
   axios.defaults.withCredentials = true;
 
   return (
-    <>
+    <AuthContextProvider>
       <Toaster position="top-center"
         toastOptions={{ 
           duration: 2000
@@ -25,7 +26,7 @@ function App() {
         <Route path='/admin' element={<Dean />}/>
         <Route path='/home' element={<Home />}/>
       </Routes>
-    </>
+    </AuthContextProvider>
   )
 }
 
