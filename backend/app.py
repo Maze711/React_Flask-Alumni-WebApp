@@ -3,9 +3,12 @@ import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 from config.config import Config  # Import Config class
+from controller.login_controller import auth_bp  # Import auth_bp Blueprint
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+
+app.register_blueprint(auth_bp)
 
 @app.route("/api/ids", methods=["GET"])
 def home():
