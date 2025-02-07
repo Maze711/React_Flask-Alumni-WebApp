@@ -1,49 +1,49 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../contexts/authContext";
 
 export const Login = () => {
   const navigate = useNavigate();
+
+  const { loginUser } = useContext(AuthContext);
 
   const [input, setInput] = useState({
     alumni_id: "",
     password: "",
   });
 
-  // Authenticates the user from the server and login
-  const loginUser = async (event) => {
+  // Handles the onSubmit from login form
+  const handleLogin = async (event) => {
     event.preventDefault();
     const { alumni_id, password } = input;
 
     try {
-      const { data } = await axios.post("/api/auth", {
-        alumni_id,
-        password,
-      });
-
-      setInput({});
-      toast.dismiss();
-      toast.success(data.message);
+      const data = await loginUser(alumni_id, password);
+      setInput({ alumni_id: "", password: "" }); // Reset input fields
       const user_role = data.role;
       const full_name = data.full_name;
       // routes the user to specific page based on their role
-      navigate(user_role === "DEAN" ? "/admin" : "/home", { state: { full_name } });
+      navigate(user_role === "DEAN" ? "/admin" : "/home", {
+        state: { full_name },
+      });
+      toast.dismiss();
+      toast.success(data.message);
     } catch (error) {
       toast.dismiss();
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.error || error.message);
-      }
-      console.dir(error, { depth: null });
+      toast.error(error);
     }
   };
 
   return (
     <>
       <div className="login template min-vh-100 d-flex align-items-center justify-content-center bg-secondary">
-        <Form className="shadow p-5 mb-5 bg-body rounded" onSubmit={loginUser}>
+        <Form
+          className="shadow p-5 mb-5 bg-body rounded"
+          onSubmit={handleLogin}
+        >
           <h2 className="mb-3">Login</h2>
           <Form.Floating className="mb-3">
             <Form.Control
