@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast'; // for notification component
 
 function App() {
 
-  axios.defaults.baseURL = 'http://localhost:5000'; // back-end/server URL
+  axios.defaults.baseURL = 'http://127.0.0.1:5000'; // back-end/server URL
   axios.defaults.withCredentials = true;
 
   return (
