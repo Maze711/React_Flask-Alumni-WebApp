@@ -3,6 +3,8 @@ import os
 from flask import Flask
 from flask_cors import CORS
 
+from config.config import Config
+
 app = Flask(__name__)
 CORS(app)
 
@@ -22,5 +24,3 @@ def home():
 if __name__ == "__main__":
     run_react()  # Start React when Flask starts
     app.run(debug=True)
-
-# try lang boss
