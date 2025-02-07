@@ -54,7 +54,7 @@ class Config:
                 query = """
                     SELECT upi.alumni_id, upi.password, upi.last_name, upi.first_name, 
                         upi.middle_name, upi.suffix, usi.role
-                    FROM user_personal_information upi
+                    FROM user_primary_information upi
                     JOIN user_secondary_information usi ON upi.alumni_id = usi.alumni_id
                     WHERE upi.alumni_id = %s
                 """
