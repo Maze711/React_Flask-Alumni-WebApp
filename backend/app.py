@@ -12,8 +12,14 @@ app.register_blueprint(auth_bp)
 
 @app.route("/api/ids", methods=["GET"])
 def home():
-    alumni_ids = Config.fetch_alumni_ids()
-    return jsonify({"alumni_ids": alumni_ids})
+    try:
+        alumni_ids = Config.fetch_alumni_ids()
+        return jsonify({"alumni_ids": alumni_ids})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    try:
+        app.run(debug=True, port=5000)
+    except Exception as e:
+        print(f"Error starting the server: {e}")

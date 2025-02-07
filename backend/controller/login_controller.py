@@ -11,20 +11,28 @@ def login():
     alumni_id = data.get("alumni_id")
     password = data.get("password")
 
+    error_conditions = {
+        (not alumni_id or not password): ("Missing alumni_id or password", 400),
+        (Config.fetch_alumni_details(alumni_id) is None): ("Invalid alumni_id", 401),
+    }
+
+    for condition, (message, status) in error_conditions.items():
+        if condition:
+            return jsonify({"error": message}), status
+
     user = Config.fetch_alumni_details(alumni_id)
-
-    # if user and check_password_hash(user["password"], password): use this when doing a hashing
-    if user and user["password"] == password:
-        full_name = f"{user['last_name']}, {user['first_name']}"
-        if user["middle_name"]:
-            full_name += f" {user['middle_name'][0]}."  # Add middle initial
-        if user["suffix"]:
-            full_name += f" {user['suffix']}"  # Add suffix if available
-
+    #if not check_password_hash(user["password"], password):
+    if user["password"] != password:
         return jsonify({
-            "message": "Login successful",
-            "full_name": full_name,
-            "role" : user["role"]
-        })
-    else:
-        return jsonify({"error": "Invalid credentials"}), 401
+            "error": "Invalid password"
+            }), 401
+
+    full_name = f"{user['last_name']}, {user['first_name']}"
+    full_name += f" {user['middle_name'][0]}." if user["middle_name"] else ""
+    full_name += f" {user['suffix']}" if user["suffix"] else ""
+
+    return jsonify({
+        "message": "Login Successful",
+        "full_name": full_name,
+        "role": user["role"]
+    })
