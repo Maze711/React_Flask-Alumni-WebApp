@@ -5,9 +5,10 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv("../../.env")
 
-# Fetch alumni_ids from the database
 class Config:
+    @staticmethod
     def fetch_alumni_ids():
+        alumni_ids = []
         try:
             # Fetch DB details from .env
             connection = mysql.connector.connect(
@@ -36,5 +37,7 @@ class Config:
             if connection.is_connected():
                 connection.close()
 
+        return alumni_ids 
+
 if __name__ == "__main__":
-    Class.fetch_alumni_ids()
+    Config.fetch_alumni_ids()
