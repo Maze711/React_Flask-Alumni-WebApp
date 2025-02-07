@@ -1,20 +1,31 @@
-# Dependency directories
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# Node.js
 node_modules/
 
+# Environment/config files
+.env
+.env.local
+.env.development
+.env.production
+
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.log
 
-# Operating System files
-.DS_Store
-Thumbs.db
-
-# IDE settings
+# IDE-specific files
 .vscode/
 .idea/
-.project
-.classpath
+.DS_Store
 
-# Environment files
-.env
+# Database dump
+alumni_system.sql  # If it contains sensitive data
+
+# Optional: Local configuration (only if sensitive)
+# config.py        # Uncomment if config.py contains secrets
