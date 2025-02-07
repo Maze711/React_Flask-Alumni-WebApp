@@ -2,6 +2,7 @@ import './App.css'
 import { Routes, Route } from "react-router-dom";
 import { Login } from './pages/Login';
 import { Dean } from './pages/admin/Dean';
+import { Home } from './pages/alumni/Home'
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast'; // for notification component
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Login />}/>
         <Route path="/login" element={<Login />}/>
         <Route path='/admin' element={<Dean />}/>
+        <Route path='/home' element={<Home />}/>
       </Routes>
     </>
   )
