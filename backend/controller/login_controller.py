@@ -23,7 +23,8 @@ def login():
 
         return jsonify({
             "message": "Login successful",
-            "full_name": full_name
+            "full_name": full_name,
+            "role" : user["role"]
         })
     else:
         return jsonify({"error": "Invalid credentials"}), 401
