@@ -17,7 +17,7 @@ export const AuthContextProvider = ({ children }) => {
     } catch (error) {
       console.dir(error, { depth: null });
       if (axios.isAxiosError(error) && error.response) {
-        throw error.response?.data?.error || error.message
+        throw new Error(error.response?.data?.error || error.message)
       }
     }
   };
