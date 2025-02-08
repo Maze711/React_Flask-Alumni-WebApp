@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
+import { Logout } from '../../components/LogoutButton';
 
 export const Dean = () => {
     const location = useLocation();
@@ -54,6 +55,8 @@ export const Dean = () => {
                     <p>No current User</p>
                 )}
             </ul>
+            
+            <Logout/>
         </>
         
     );
