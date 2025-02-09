@@ -13,7 +13,7 @@ def login():
 
     error_conditions = {
         (not alumni_id or not password): ("Missing alumni_id or password", 400),
-        (Config.fetch_alumni_details(alumni_id) is None): ("Invalid alumni_id", 401),
+        (Config.auth_alumni_id(alumni_id) is None): ("Invalid alumni_id", 401),
     }
 
     for condition, (message, status) in error_conditions.items():
