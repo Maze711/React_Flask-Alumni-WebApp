@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-export const Logout = () =>  {
+export const Logout = () => {
     return (
-        <Link to={'/login'}>Logout</Link>
+        <Link style={{color: "white", textDecoration: "none"}} to={'/login'}>Logout</Link>
     );
 }
