@@ -78,6 +78,5 @@ def fetch_all_users_route():
     users = Config.fetch_all_users()
     return jsonify(users)
 
-
 if __name__ == "__main__":
-    print(Config.fetch_alumni_ids())  # Test alumni ID fetching
+    print(Config.fetch_all_users())  # Test alumni ID fetching
