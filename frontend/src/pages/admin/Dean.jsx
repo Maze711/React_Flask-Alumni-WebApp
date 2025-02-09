@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 import { Logout } from '../../components/LogoutButton';
+import { AlumniNavbar } from "../../components/NavBar";
 
 export const Dean = () => {
     const location = useLocation();
@@ -44,6 +45,8 @@ export const Dean = () => {
 
     return (
         <>
+        <AlumniNavbar/>
+
             <h1>Welcome, {full_name}</h1>
             <h2>ALUMNI IDs:</h2>
             <ul>
