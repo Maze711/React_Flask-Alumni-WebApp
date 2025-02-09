@@ -20,7 +20,7 @@ def login():
         if condition:
             return jsonify({"error": message}), status
 
-    user = Config.fetch_alumni_details(alumni_id)
+    user = Config.auth_alumni_id(alumni_id)
     #if not check_password_hash(user["password"], password):
     if user["password"] != password:
         return jsonify({
