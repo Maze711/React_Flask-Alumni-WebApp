@@ -8,7 +8,7 @@ export const AlumniNavbar = () => {
     const [active, setActive] = useState("home");
 
     return (
-        <Navbar expand="lg"  style={{ background: "linear-gradient(50deg, #193B02, #275004)"}} variant="dark">
+        <Navbar expand="lg" fixed="top" style={{ background: "linear-gradient(100deg, #193B02, #275004)"}} variant="dark">
             <Container>
                 <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
                     <img
