@@ -63,17 +63,13 @@ export const AlumniNavbar = () => {
 
                     {/* Logout Button - Moves inside menu on mobile */}
                     <div className="d-lg-none text-center mt-3">
-                        <Button style={{ backgroundColor: "transparent", border: "none" }}>
-                            <Logout />
-                        </Button>
+                        <Logout />
                     </div>
                 </Navbar.Collapse>
 
                 {/* Logout Button (Desktop Only) */}
                 <div className="d-none d-lg-block">
-                    <Button style={{ backgroundColor: "transparent", border: "none"}}>
-                        <Logout />
-                    </Button>
+                    <Logout />
                 </div>
             </Container>
         </Navbar>

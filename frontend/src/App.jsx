@@ -1,11 +1,12 @@
-import './App.css'
-import { Routes, Route } from "react-router-dom";
+import './App.css';
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Login } from './pages/Login';
 import { Dean } from './pages/admin/Dean';
-import { Home } from './pages/alumni/Home'
+import { Home } from './pages/alumni/Home';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast'; // for notification component
 import { AuthContextProvider } from './contexts/authContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
 
@@ -21,13 +22,21 @@ function App() {
         reverseOrder={false}
       />
       <Routes>
-        <Route path="/" element={<Login />}/>
-        <Route path="/login" element={<Login />}/>
-        <Route path='/admin' element={<Dean />}/>
-        <Route path='/home' element={<Home />}/>
+        {/* Unauthorize routes */}
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected Routes (Needs to sign in to access) */}
+        <Route element={<ProtectedRoute allowedRoles={['DEAN']} />}>
+          <Route path='/admin' element={<Dean />} />
+        </Route>
+        <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>
+          <Route path='/home' element={<Home />} />
+        </Route>
+
       </Routes>
     </AuthContextProvider>
-  )
+  );
 }
 
-export default App
+export default App;
