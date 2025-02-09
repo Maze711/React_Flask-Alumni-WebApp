@@ -42,7 +42,6 @@ export const Dean = () => {
       return data;
     } catch (error) {
       console.log(error);
-      // navigate('/login'); // Navigates them back to login
       throw error;
     }
   };

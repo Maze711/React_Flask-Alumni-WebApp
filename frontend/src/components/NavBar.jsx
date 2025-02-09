@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Logout } from '../components/LogoutButton';
 import plmunLogo from "../assets/img/Pamantasan_ng_Lungsod_ng_Muntinlupa_logo 2.png";
 
 export const AlumniNavbar = () => {
     const [active, setActive] = useState("home");
+    const current_location = useLocation().pathname.split("/")[1]; // gets the current location
+
+    useEffect(() => {
+        // Set the active state if the current location changes
+        setActive(current_location);
+    }, [current_location])
 
     return (
         <Navbar expand="lg" fixed="top" style={{ background: "linear-gradient(100deg, #193B02, #275004)"}} variant="dark">

@@ -37,3 +37,7 @@ body {
   max-height: 400px;
   overflow-y: auto; /* Enables vertical scrolling */
 }
+
+.profile-container{
+  padding-top: 100px;
+}
