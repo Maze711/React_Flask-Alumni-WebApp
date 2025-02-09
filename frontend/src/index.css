@@ -32,3 +32,8 @@ body {
   font-weight:  lighter;
   font-style: italic;
 }
+
+.table-container {
+  max-height: 400px;
+  overflow-y: auto; /* Enables vertical scrolling */
+}
