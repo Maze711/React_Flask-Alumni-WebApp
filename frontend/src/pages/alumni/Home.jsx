@@ -1,13 +1,17 @@
-import { useLocation } from 'react-router-dom';
+import { Logout } from '../../components/LogoutButton';
+import { AlumniNavbar } from "../../components/NavBar";
 
 export const Home = () => {
-    const location = useLocation();
-    const full_name = location.state?.full_name || 'Alumni';
+    const user = JSON.parse(localStorage.getItem("user"))
 
     return (
         <>
-            <h1>Welcome, {full_name}</h1>
+            <AlumniNavbar/>
+            <h1>Welcome, {user.full_name}</h1>
             <p>This is the home page for alumni.</p>
+            
+            <Logout/>
+            
         </>
     );
 };

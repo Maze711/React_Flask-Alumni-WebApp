@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useLocation } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/authContext';
 import { Logout } from '../../components/LogoutButton';
 import { AlumniNavbar } from "../../components/NavBar";
 
 export const Dean = () => {
-    const location = useLocation();
-    const full_name = location.state?.full_name || 'Dean';
+    const { user } = useAuthContext();
     const [ids, setIds] = useState([]);
 
     const getUserData = async () => {
@@ -47,7 +46,7 @@ export const Dean = () => {
         <>
         <AlumniNavbar/>
 
-            <h1>Welcome, {full_name}</h1>
+            <h1>Welcome, {user ? user.full_name : "DEAN"}</h1>
             <h2>ALUMNI IDs:</h2>
             <ul>
                 {ids.length > 0 ? (

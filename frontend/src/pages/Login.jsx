@@ -2,15 +2,15 @@ import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBInput } from "mdb-react-ui-kit";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
-import { AuthContext } from "../contexts/authContext";
+import { useState } from "react";
+import { useAuthContext } from "../contexts/authContext";
 import bgImage from "../assets/img/login-background.png";
 import plmunLogo from "../assets/img/Pamantasan_ng_Lungsod_ng_Muntinlupa_logo 2.png";
 
 export const Login = () => {
   const navigate = useNavigate();
 
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser } = useAuthContext();
 
   const [input, setInput] = useState({
     alumni_id: "",
@@ -26,11 +26,8 @@ export const Login = () => {
       const data = await loginUser(alumni_id, password);
       setInput({ alumni_id: "", password: "" }); // Reset input fields
       const user_role = data.role;
-      const full_name = data.full_name;
       // routes the user to specific page based on their role
-      navigate(user_role === "DEAN" ? "/admin" : "/home", {
-        state: { full_name },
-      });
+      navigate(user_role === "DEAN" ? "/admin" : "/home");
       toast.dismiss();
       toast.success(data.message);
     } catch (error) {
