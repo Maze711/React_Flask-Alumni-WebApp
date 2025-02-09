@@ -1,65 +1,122 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useAuthContext } from '../../contexts/authContext';
-import { Logout } from '../../components/LogoutButton';
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { AlumniNavbar } from "../../components/NavBar";
+import {
+  MDBContainer,
+  MDBTable,
+  MDBTableHead,
+  MDBTableBody,
+} from "mdb-react-ui-kit";
 
 export const Dean = () => {
-    const { user } = useAuthContext();
-    const [ids, setIds] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const column_names = [
+    "ID",
+    "Alumni ID",
+    "Last Name",
+    "First Name",
+    "Middle Name",
+    "Suffix",
+    "Gender",
+    "Email",
+    "Birthdate",
+    "Civil Status",
+    "College Department",
+    "Address",
+    "Number",
+    "Year Graduated",
+    "Work Status",
+    "Job Title",
+    "Password",
+    "Role",
+  ];
 
-    const getUserData = async () => {
-        // GET the user data from the server/backend
-        try {
-            const { data } = await axios.get('/api/ids', {
-                withCredentials: true,
-            });
-            const alumni_ids = data.alumni_ids;
-            toast.success('Alumni IDs fetched successfully');
-            return alumni_ids;
-        } catch (error) {
-            setIds([]);
-            console.log(error);
-            // navigate('/login'); // Navigates them back to login
-            toast.dismiss();
-            if (axios.isAxiosError(error) && error.response) {
-                toast.error(error.message);
-            }
-            throw error.message;
-        }
-    };
+  const getAllUserData = async () => {
+    // GET the all user data from the server/backend
+    try {
+      const { data } = await axios.get("/fetch_all_users", {
+        withCredentials: true,
+      });
 
-    useEffect(() => {
-        getUserData()
-            .then((alumni_ids) => {
-                setIds(alumni_ids);
-            })
-            .catch((error) => {
-                toast.error(error);
-                console.log(error);
-            });
-    }, []);
+      console.log("Fetched Data: ", data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      // navigate('/login'); // Navigates them back to login
+      throw error;
+    }
+  };
 
+  // Fetch all the user data once the admin page is rendered
+  useEffect(() => {
+    getAllUserData()
+      .then((data) => {
+        setAllUsers(data);
+        console.log("All users:", data);
+      })
+      .catch((error) => {
+        setAllUsers([]);
+        console.log(error);
+      });
+  }, []);
 
-    return (
-        <>
-        <AlumniNavbar/>
+  return (
+    <MDBContainer fluid className="p-0 d-flex flex-column vh-100">
+      <AlumniNavbar />
 
-            <h1>Welcome, {user ? user.full_name : "DEAN"}</h1>
-            <h2>ALUMNI IDs:</h2>
-            <ul>
-                {ids.length > 0 ? (
-                    ids.map((id) => (
-                        <li key={id}>{id}</li>
-                    ))
+      <main className="flex-grow-1" style={{padding: '80px'}}>
+        <h1 className="text-center p-3 mb-3 fw-bold">Admin Dashboard</h1>
+        <div className="w-100 px-5">
+          {/* Scrollable Table Wrapper */}
+          <div className="table-container">
+            <MDBTable striped hover>
+              <MDBTableHead dark>
+                <tr>
+                  {column_names.map((col_name, index) => (
+                    <th scope="col" key={index} className="text-truncate">
+                      {col_name}
+                    </th>
+                  ))}
+                </tr>
+              </MDBTableHead>
+              <MDBTableBody>
+                {/* Iterates and display all the users per row */}
+                {allUsers.length > 0 ? (
+                  allUsers.map((user, key) => (
+                    <tr key={key}>
+                      <td>{user.ID}</td>
+                      <td>{user.alumni_id}</td>
+                      <td>{user.last_name}</td>
+                      <td>{user.first_name}</td>
+                      <td>{user.middle_name}</td>
+                      <td>{user.suffix}</td>
+                      <td>{user.gender}</td>
+                      <td>{user.email}</td>
+                      <td>{user.birthdate}</td>
+                      <td>{user.civil_status}</td>
+                      <td>{user.college_department}</td>
+                      <td>{user.address}</td>
+                      <td>{user.number}</td>
+                      <td>{user.year_graduated}</td>
+                      <td>{user.work_status}</td>
+                      <td>{user.job_title}</td>
+                      <td>{user.password}</td>
+                      <td>{user.role}</td>
+                    </tr>
+                  ))
                 ) : (
-                    <p>No current User</p>
+                  <tr>
+                    {/* Display this only if there are no user found */}
+                    <td colSpan={column_names.length} className="text-center">
+                      No Records Found
+                    </td>
+                  </tr>
                 )}
-            </ul>
-            
-            <Logout/>
-        </>
-        
-    );
+              </MDBTableBody>
+            </MDBTable>
+          </div>
+        </div>
+      </main>
+    </MDBContainer>
+  );
 };
