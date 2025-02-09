@@ -35,7 +35,7 @@ export const Login = () => {
       toast.success(data.message);
     } catch (error) {
       toast.dismiss();
-      toast.error(error.response?.data?.error || error.message);
+      toast.error(error.response?.data?.error || "Something went wrong, please check your connection and login again");
     }
   };
 
@@ -43,7 +43,7 @@ export const Login = () => {
     <MDBContainer fluid>
       <MDBRow>
         {/* Left side container with background image, logo, and system name */}
-        <MDBCol sm="5" className="d-none d-sm-block px-0 position-relative">
+        <MDBCol sm="7" className="d-none d-sm-block px-0 position-relative">
           <div
             className="overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white"
             style={{
@@ -73,8 +73,8 @@ export const Login = () => {
 
         {/* right side container with the login form */}
         <MDBCol
-          sm="7"
-          className="d-flex flex-column align-items-center justify-content-center min-vh-100"
+          sm="3"
+          className="d-flex flex-column align-items-center justify-content-center min-vh-100 flex-grow-1"
         >
           <div className="d-flex flex-row">
             <span
