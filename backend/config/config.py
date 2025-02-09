@@ -6,6 +6,7 @@ from flask import Blueprint, request, jsonify
 # Load environment variables from .env file
 load_dotenv("../../.env")
 config_bp = Blueprint("config", __name__)
+
 class Config:
     @staticmethod
     def get_db_connection():
@@ -73,10 +74,45 @@ class Config:
 
         return None  # Return None if connection fails or user is not found
 
+    @staticmethod
+    def fetch_user_profile(alumni_id):
+        """Fetch all user information from both tables and join them based on alumni_id."""
+        connection = Config.get_db_connection()
+        
+        if connection:
+            try:
+                cursor = connection.cursor(dictionary=True)
+                query = """
+                    SELECT upi.*, usi.*
+                    FROM user_primary_information upi
+                    JOIN user_secondary_information usi ON upi.alumni_id = usi.alumni_id
+                    WHERE upi.alumni_id = %s
+                """
+                cursor.execute(query, (alumni_id, ))
+                user_data = cursor.fetchone()  # Fetch the record based on alumni_id
+
+                cursor.close()
+                return user_data
+            except mysql.connector.Error as e:
+                print(f"Error fetching user information: {e}")
+            finally:
+                connection.close()
+
+        return None # Return None if connection fails or user is not found
+
 @config_bp.route('/fetch_all_users', methods=['GET'])
 def fetch_all_users_route():
     users = Config.fetch_all_users()
     return jsonify(users)
+
+@config_bp.route('/fetch_user_profile', methods=['POST'])
+def fetch_user_profile_route():
+    data = request.json
+    alumni_id = data.get("alumni_id")
+    print(alumni_id)
+
+    user_profile = Config.fetch_user_profile(alumni_id)
+    return jsonify(user_profile)
 
 if __name__ == "__main__":
     print(Config.fetch_all_users())  # Test alumni ID fetching

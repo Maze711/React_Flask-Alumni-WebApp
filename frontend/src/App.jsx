@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Toaster } from 'react-hot-toast'; // for notification component
 import { AuthContextProvider } from './contexts/authContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { Profile } from './pages/profile';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>
           <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
         </Route>
 
       </Routes>

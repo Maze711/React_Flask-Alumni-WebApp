@@ -32,6 +32,7 @@ def login():
     full_name += f" {user['suffix']}" if user["suffix"] else ""
 
     return jsonify({
+        "alumni_id" : alumni_id,
         "message": "Login Successful",
         "full_name": full_name,
         "role": user["role"]
