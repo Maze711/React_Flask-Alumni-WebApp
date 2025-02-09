@@ -1,10 +1,11 @@
 import os
 import mysql.connector
 from dotenv import load_dotenv
+from flask import Blueprint, request, jsonify
 
 # Load environment variables from .env file
 load_dotenv("../../.env")
-
+config_bp = Blueprint("config", __name__)
 class Config:
     @staticmethod
     def get_db_connection():
@@ -22,31 +23,33 @@ class Config:
             return None
 
     @staticmethod
-    def fetch_alumni_ids():
-        """Fetch all alumni IDs from the database."""
-        alumni_ids = []
+    def fetch_all_users():
+        """Fetch all user information from both tables and join them."""
+        users = []
         connection = Config.get_db_connection()
         
         if connection:
             try:
-                cursor = connection.cursor()
-                cursor.execute("SELECT alumni_id FROM user_secondary_information")
-                alumni_ids = [row[0] for row in cursor.fetchall()]  # Extracting alumni_id values
-                
-                if alumni_ids:
-                    print("\n".join(f"Alumni ID: {alumni_id}" for alumni_id in alumni_ids))
-                else:
-                    print("No alumni_id found.")
+                cursor = connection.cursor(dictionary=True)
+                query = """
+                    SELECT upi.*, usi.*
+                    FROM user_primary_information upi
+                    JOIN user_secondary_information usi ON upi.alumni_id = usi.alumni_id
+                """
+                cursor.execute(query)
+                users = cursor.fetchall()  # Fetch all records
+
                 cursor.close()
             except mysql.connector.Error as e:
-                print(f"Error fetching alumni IDs: {e}")
+                print(f"Error fetching user information: {e}")
             finally:
                 connection.close()
 
-        return alumni_ids
+        return users  # Returns a list of dictionaries or an empty list if no users found
 
     @staticmethod
-    def fetch_alumni_details(alumni_id):
+    def auth_alumni_id(alumni_id):
+        """Authenticate user by fetching user details from the database."""
         connection = Config.get_db_connection()
         if connection:
             try:
@@ -69,6 +72,12 @@ class Config:
                 connection.close()
 
         return None  # Return None if connection fails or user is not found
+
+@config_bp.route('/fetch_all_users', methods=['GET'])
+def fetch_all_users_route():
+    users = Config.fetch_all_users()
+    return jsonify(users)
+
 
 if __name__ == "__main__":
     print(Config.fetch_alumni_ids())  # Test alumni ID fetching
