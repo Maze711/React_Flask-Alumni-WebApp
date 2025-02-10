@@ -1,17 +1,27 @@
 import { useEffect, useState } from "react";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Logout } from '../components/LogoutButton';
 import plmunLogo from "../assets/img/Pamantasan_ng_Lungsod_ng_Muntinlupa_logo 2.png";
+import { useAuthContext } from "../contexts/authContext";
 
 export const AlumniNavbar = () => {
     const [active, setActive] = useState("home");
-    const current_location = useLocation().pathname.split("/")[1]; // gets the current location
+    const currentLocation = useLocation().pathname.split("/")[1]; // gets the current location
+    const { user } = useAuthContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Set the active state if the current location changes
-        setActive(current_location);
-    }, [current_location])
+        setActive(currentLocation);
+    }, [currentLocation]);
+
+    // Handles navigation item clicks and updates the active state
+    const handleNavClick = (item) => {
+        const target = item === "home" && user.role === "DEAN" ? "/admin" : `/${item}`;
+        navigate(target);
+        setActive(item);
+    };
 
     return (
         <Navbar expand="lg" fixed="top" style={{ background: "linear-gradient(100deg, #193B02, #275004)"}} variant="dark">
@@ -48,7 +58,7 @@ export const AlumniNavbar = () => {
                                         transition: "none",
                                         color: "white"
                                     }}
-                                    onClick={() => setActive(item)}
+                                    onClick={() => handleNavClick(item)}
                                 >
                                     {item}
                                 </Nav.Link>
@@ -65,6 +75,36 @@ export const AlumniNavbar = () => {
                                 )}
                             </div>
                         ))}
+                        {(user.role === "DEAN" || user.role === "ADMIN") && (
+                            <div className="text-center">
+                                <Nav.Link
+                                    as={Link}
+                                    to="/admin"
+                                    className="text-uppercase"
+                                    style={{
+                                        fontWeight: active === "admin" ? "bold" : "normal",
+                                        position: "relative",
+                                        paddingBottom: "5px",
+                                        transition: "none",
+                                        color: "white"
+                                    }}
+                                    onClick={() => setActive("admin")}
+                                >
+                                    Dashboard
+                                </Nav.Link>
+                                {active === "admin" && (
+                                    <div
+                                        style={{
+                                            width: "5px",
+                                            height: "5px",
+                                            backgroundColor: "white",
+                                            borderRadius: "50%",
+                                            margin: "auto",
+                                        }}
+                                    ></div>
+                                )}
+                            </div>
+                        )}
                     </Nav>
 
                     {/* Logout Button - Moves inside menu on mobile */}
