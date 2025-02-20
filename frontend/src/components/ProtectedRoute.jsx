@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { Outlet, Navigate } from "react-router-dom";
 
 export const ProtectedRoute = ({ allowedRoles }) => {
@@ -6,11 +8,19 @@ export const ProtectedRoute = ({ allowedRoles }) => {
 
     // If the user is not authenticated, route them back to login page
     if (!user && !role) {
+        useEffect(() => {
+            toast.dismiss()
+            toast.error("Please login first before accessing this page.")
+        }, [])
         return <Navigate to={'/login'} />;
     }
 
     // If the user's role is not allowed, route them back to home page
     if (!allowedRoles.includes(role)) {
+        useEffect(() => {
+            toast.dismiss()
+            toast.error("You are unauthorized to enter this page.")
+        }, [])
         return <Navigate to={'/home'} />;
     }
 
