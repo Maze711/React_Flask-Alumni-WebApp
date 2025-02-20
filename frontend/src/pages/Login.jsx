@@ -105,7 +105,7 @@ export const Login = () => {
               }
             />
 
-            <label
+            {/* <label
               className="mb-1 fw-bold align-self-start"
               style={{ color: "rgba(33, 71, 3, 1)" }}
             >
@@ -122,7 +122,7 @@ export const Login = () => {
               <option value="1">{"Bachelor of Science in Computer Science (CS)"}</option>
               <option value="2">{"Bachelor of Science in Information Technology (IT)"}</option>
               <option value="3">{"Associate in Computer Technology (ACT)"}</option>
-            </select>
+            </select> */}
 
             <label
               className="mb-1 fw-bold align-self-start"

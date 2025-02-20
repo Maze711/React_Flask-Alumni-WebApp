@@ -3,12 +3,11 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Logout } from '../components/LogoutButton';
 import plmunLogo from "../assets/img/Pamantasan_ng_Lungsod_ng_Muntinlupa_logo 2.png";
-import { useAuthContext } from "../contexts/authContext";
 
 export const AlumniNavbar = () => {
     const [active, setActive] = useState("home");
     const currentLocation = useLocation().pathname.split("/")[1]; // gets the current location
-    const { user } = useAuthContext();
+    const user = JSON.parse(localStorage.getItem('user'))
     const navigate = useNavigate();
 
     useEffect(() => {
