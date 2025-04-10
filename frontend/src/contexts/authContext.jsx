@@ -6,14 +6,11 @@ export const AuthContext = createContext({});
 export const useAuthContext = () => useContext(AuthContext); // Let's us use the context
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(); 
-
-  // Retrieved user from local storage and set them if there are any
-  useEffect(() => {
+  const [user, setUser] = useState(()=> {
+    // Initialize user state from localStorage (for persistent login across page refreshes)
     const storedUser = localStorage.getItem("user");
-
-    if (storedUser) setUser(JSON.parse(storedUser));
-  }, []);
+    return storedUser ? JSON.parse(storedUser) : null
+  });
 
   // saves the user to local storage if the state is not empty or changes
   useEffect(() => {

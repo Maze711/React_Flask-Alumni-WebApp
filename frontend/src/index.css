@@ -38,6 +38,11 @@ body {
   overflow-y: auto; /* Enables vertical scrolling */
 }
 
-.profile-container{
+.profile-container {
   padding-top: 100px;
+}
+
+.about-header {
+  font-family: "Inter", serif;
+  font-weight: bold;
 }
