@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast'; // for notification component
 import { AuthContextProvider } from './contexts/authContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Profile } from './pages/profile';
+import { About } from './pages/alumni/About';
 
 function App() {
 
@@ -31,9 +32,13 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['DEAN']} />}>
           <Route path='/admin' element={<Dean />} />
         </Route>
-        <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>
+        <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>\
+          {/* Routes to Home Page */}
           <Route path='/home' element={<Home />} />
+          {/* Routes to Profile Page */}
           <Route path='/profile' element={<Profile />} />
+          {/* Routes to About Page */}
+          <Route path='/about' element={<About />} />
         </Route>
 
       </Routes>

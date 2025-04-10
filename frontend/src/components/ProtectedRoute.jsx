@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { Outlet, Navigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/authContext";
 
 export const ProtectedRoute = ({ allowedRoles }) => {
-    const user = JSON.parse(localStorage.getItem("user"))
+    const { user } = useAuthContext()
     const role = user ? user.role : null;
 
     // If the user is not authenticated, route them back to login page

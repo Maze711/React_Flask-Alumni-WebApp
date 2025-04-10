@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBInput } from "mdb-react-ui-kit";
+import { MDBCol } from "mdb-react-ui-kit";
 import { Logout } from "../../components/LogoutButton";
 import { AlumniNavbar } from "../../components/NavBar";
 import homeBgImage from "../../assets/img/home-background.png";
