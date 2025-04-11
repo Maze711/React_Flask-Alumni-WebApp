@@ -9,6 +9,7 @@ import { AuthContextProvider } from './contexts/authContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Profile } from './pages/profile';
 import { About } from './pages/alumni/About';
+import { AdminDashboard } from './pages/registrar/Dashboard';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         {/* Protected Routes (Needs to sign in to access) */}
         <Route element={<ProtectedRoute allowedRoles={['DEAN']} />}>
           <Route path='/admin' element={<Dean />} />
+          <Route path='/registrar' element={<AdminDashboard />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>\
           {/* Routes to Home Page */}
