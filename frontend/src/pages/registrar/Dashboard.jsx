@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { SideBar } from "../../components/RegistrarNav";
 import { FilterContent } from "../../components/Filter";
+import { AddAlumniModal } from "../../components/AddUser";
 import FilterIcon from "../../assets/icon/filter_ico.svg";
 import SearchIcon from "../../assets/icon/search_ico.svg";
 import UserAddIcon from "../../assets/icon/user_add_ico.svg";
@@ -13,7 +14,8 @@ export const AdminDashboard = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileView, setIsMobileView] = useState(false);
-  const [showFilter, setShowFilter] = useState(false); // Add this line to define showFilter state
+  const [showFilter, setShowFilter] = useState(false);
+  const [showAddAlumniModal, setShowAddAlumniModal] = useState(false); // State for AddAlumniModal visibility
   const rowsPerPage = 10;
 
   const getAllUserData = async () => {
@@ -30,11 +32,11 @@ export const AdminDashboard = () => {
       }));
 
       setAllUsers(transformed);
-      setFilteredUsers(transformed); // Ensure this is always an array
+      setFilteredUsers(transformed);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       setAllUsers([]);
-      setFilteredUsers([]); // Set to an empty array on error
+      setFilteredUsers([]);
     }
   };
 
@@ -54,7 +56,7 @@ export const AdminDashboard = () => {
   }, []);
 
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
-  const paginatedUsers = (filteredUsers || []).slice(
+  const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
@@ -120,7 +122,10 @@ export const AdminDashboard = () => {
                   />
                   <span>Filter</span>
                 </button>
-                <button className="btn btn-success d-flex align-items-center gap-1 px-3 py-2">
+                <button
+                  className="btn btn-success d-flex align-items-center gap-1 px-3 py-2"
+                  onClick={() => setShowAddAlumniModal(true)} // Open AddAlumniModal
+                >
                   <img
                     src={UserAddIcon}
                     alt="Add User"
@@ -135,6 +140,18 @@ export const AdminDashboard = () => {
               </div>
             </div>
           </div>
+
+          {/* Add Alumni Modal */}
+          {showAddAlumniModal && (
+            <AddAlumniModal
+              onClose={() => setShowAddAlumniModal(false)} // Close the modal
+              onAddSuccess={(newUser) => {
+                setAllUsers((prev) => [...prev, newUser]);
+                setFilteredUsers((prev) => [...prev, newUser]);
+                setShowAddAlumniModal(false);
+              }}
+            />
+          )}
 
           {/* Filter Modal */}
           {showFilter && (
