@@ -45,8 +45,8 @@ export const SideBar = () => {
           <Link to="/" className="navbar-brand d-flex align-items-center">
             <img src={plmunLogo} alt="Logo" className="me-2" style={{ height: "40px" }} />
             <div>
-              <h1 className="mb-0" style={{ fontSize: "20px" }}>Alumni</h1>
-              <p className="mb-0 small">PLMUN</p>
+            <h1 className="mb-0" id="alumni" style={{ fontSize: "24px" }}>Alumni</h1>
+            <p className="mb-0 small">PLMUN</p>
             </div>
           </Link>
 
@@ -109,8 +109,8 @@ export const SideBar = () => {
         <div className="mx-auto mb-2 d-flex align-items-center justify-content-center">
           <img src={plmunLogo} alt="Logo" style={{ height: "60px" }} />
         </div>
-        <h5 className="mb-0">Alumni</h5>
-        <small>PLMUN</small>
+        <h1 className="mb-0" id="alumni" style={{ fontSize: "24px" }}>Alumni</h1>
+        <p className="mb-0 small">PLMUN</p>
       </div>
 
       <nav className="nav flex-column px-3 mb-auto">

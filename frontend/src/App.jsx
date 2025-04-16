@@ -1,6 +1,7 @@
 import './App.css';
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
 import { Dean } from './pages/admin/Dean';
 import { Home } from './pages/alumni/Home';
 import axios from 'axios';
@@ -28,6 +29,7 @@ function App() {
         {/* Unauthorize routes */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
         {/* Protected Routes (Needs to sign in to access) */}
         <Route element={<ProtectedRoute allowedRoles={['DEAN']} />}>

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { SideBar } from "../../components/RegistrarNav";
+// Import SVG icons
+import FilterIcon from "../../assets/icon/filter_ico.svg";
+import SearchIcon from "../../assets/icon/search_ico.svg";
+import UserAddIcon from "../../assets/icon/user_add_ico.svg";
+import UserViewIcon from "../../assets/icon/user_view.svg";
+import AlumniIcon from "../../assets/icon/user_ico.svg"; // Assuming this is the alumni icon
 
 export const AdminDashboard = () => {
   const [allUsers, setAllUsers] = useState([]);
@@ -29,12 +35,11 @@ export const AdminDashboard = () => {
   useEffect(() => {
     getAllUserData();
     
-    // Handle responsive view detection
     const handleResize = () => {
       setIsMobileView(window.innerWidth < 768);
     };
     
-    handleResize(); // Set initial state
+    handleResize();
     window.addEventListener('resize', handleResize);
     
     return () => {
@@ -57,70 +62,92 @@ export const AdminDashboard = () => {
 
   return (
     <div className="d-flex flex-column flex-md-row min-vh-100">
-      {/* SideBar - Only visible on desktop */}
       <SideBar />
       
-      {/* Main Content Area with its own scrolling */}
       <main 
         className="flex-grow-1 bg-light" 
         style={{
-          marginTop: isMobileView ? "56px" : 0, // Only add top margin on mobile for the fixed header
-          width: isMobileView ? "100%" : "calc(100% - 260px)", // Adjust width based on sidebar presence
+          marginTop: isMobileView ? "56px" : 0,
+          width: isMobileView ? "100%" : "calc(100% - 260px)",
           minHeight: isMobileView ? "calc(100vh - 56px)" : "100vh",
           overflowY: "auto"
         }}
       >
-        <div className="p-3">
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-            <h4 className="mb-0">Alumni Users</h4>
-            <div className="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2">
-              <div className="input-group">
-                <span className="input-group-text bg-success text-white border-0">
-                  <i className="bi bi-search"></i>
+        <div className="p-4">
+          {/* Header with Alumni Icon */}
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div className="d-flex align-items-center gap-2">
+              <img src={AlumniIcon} alt="Alumni" style={{ width: '24px', height: '24px' }} />
+              <h4 className="mb-0 fw-bold">Alumni Users</h4>
+            </div>
+            
+            {/* Search and Action Buttons */}
+            <div className="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3">
+              <div className="input-group" style={{ width: '250px' }}>
+                <span className="input-group-text bg-white border-end-0">
+                  <img src={SearchIcon} alt="Search" style={{ width: '18px', height: '18px' }} />
                 </span>
-                <input type="text" className="form-control" placeholder="Search Alumni" />
+                <input 
+                  type="text" 
+                  className="form-control border-start-0" 
+                  placeholder="Search Alumni"
+                  style={{ paddingLeft: '5px' }}
+                />
               </div>
+              
               <div className="d-flex gap-2">
-                <i className="bi bi-sliders fs-5 d-flex align-items-center"></i>
-                <i className="bi bi-person-plus fs-5 d-flex align-items-center"></i>
+                <button className="btn btn-light border d-flex align-items-center gap-1 px-3 py-2">
+                  <img src={FilterIcon} alt="Filter" style={{ width: '16px', height: '16px' }} />
+                  <span>Filter</span>
+                </button>
+                <button className="btn btn-success d-flex align-items-center gap-1 px-3 py-2">
+                  <img src={UserAddIcon} alt="Add User" style={{ width: '16px', height: '16px', filter: 'brightness(0) invert(1)' }} />
+                  <span>Add Alumni</span>
+                </button>
               </div>
             </div>
           </div>
 
           {/* Table */}
-          <div className="table-responsive">
-            <table className="table table-bordered table-striped">
-              <thead className="table-success text-center">
+          <div className="table-responsive rounded-3 overflow-hidden border">
+            <table className="table table-hover mb-0">
+              <thead className="bg-success text-white">
                 <tr>
-                  <th>ID</th>
+                  <th className="ps-4">ID</th>
                   <th>Alumni ID</th>
                   <th>Full Name</th>
                   <th>College Dept.</th>
                   <th className="d-none d-md-table-cell">Year Graduated</th>
                   <th className="d-none d-md-table-cell">Batch</th>
                   <th>Role</th>
-                  <th>Actions</th>
+                  <th className="pe-4">Actions</th>
                 </tr>
               </thead>
-              <tbody className="text-center">
+              <tbody>
                 {paginatedUsers.length > 0 ? (
                   paginatedUsers.map((user, index) => (
                     <tr key={index}>
-                      <td>{user.ID}</td>
+                      <td className="ps-4">{user.ID}</td>
                       <td>{user.alumni_id}</td>
                       <td>{user.full_name}</td>
                       <td>{user.college_department}</td>
                       <td className="d-none d-md-table-cell">{user.year_graduated}</td>
                       <td className="d-none d-md-table-cell">{user.batch || "-"}</td>
-                      <td>{user.role}</td>
                       <td>
-                        <i className="bi bi-card-list"></i>
+                        <span className={`badge ${user.role === 'DEAN' ? 'bg-primary' : 'bg-secondary'}`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="pe-4">
+                        <button className="btn btn-sm btn-outline-secondary">
+                          <img src={UserViewIcon} alt="View" style={{ width: '16px', height: '16px' }} />
+                        </button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8">No Records Found</td>
+                    <td colSpan="8" className="text-center py-4">No Records Found</td>
                   </tr>
                 )}
               </tbody>
@@ -128,27 +155,32 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Pagination */}
-          <nav className="d-flex justify-content-center mt-3">
-            <ul className="pagination pagination-sm flex-wrap mb-0">
-              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                  &lt;
-                </button>
-              </li>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <li key={page} className={`page-item ${currentPage === page ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => handlePageChange(page)}>
-                    {page}
+          <div className="d-flex justify-content-between align-items-center mt-3">
+            <div className="text-muted">
+              Showing {(currentPage - 1) * rowsPerPage + 1} to {Math.min(currentPage * rowsPerPage, allUsers.length)} of {allUsers.length} entries
+            </div>
+            <nav>
+              <ul className="pagination pagination-sm mb-0">
+                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+                    Previous
                   </button>
                 </li>
-              ))}
-              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                  &gt;
-                </button>
-              </li>
-            </ul>
-          </nav>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <li key={page} className={`page-item ${currentPage === page ? "active" : ""}`}>
+                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                      {page}
+                    </button>
+                  </li>
+                ))}
+                <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </main>
     </div>
