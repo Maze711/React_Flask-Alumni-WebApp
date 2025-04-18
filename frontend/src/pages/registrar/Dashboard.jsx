@@ -3,6 +3,8 @@ import axios from "axios";
 import { SideBar } from "../../components/RegistrarNav";
 import { FilterContent } from "../../components/Filter";
 import { AddAlumniModal } from "../../components/AddUser";
+import { ViewUserModal } from "../../components/ViewUser";
+// Import SVG files
 import FilterIcon from "../../assets/icon/filter_ico.svg";
 import SearchIcon from "../../assets/icon/search_ico.svg";
 import UserAddIcon from "../../assets/icon/user_add_ico.svg";
@@ -15,7 +17,10 @@ export const AdminDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileView, setIsMobileView] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [showAddAlumniModal, setShowAddAlumniModal] = useState(false); // State for AddAlumniModal visibility
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [showAddAlumniModal, setShowAddAlumniModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const rowsPerPage = 10;
 
   const getAllUserData = async () => {
@@ -26,7 +31,7 @@ export const AdminDashboard = () => {
 
       const transformed = data.map((user) => ({
         ...user,
-        full_name: `${user.last_name}, ${user.first_name} ${
+        full_name: `${user.last_name || ""}, ${user.first_name || ""} ${
           user.middle_name || ""
         } ${user.suffix || ""}`.trim(),
       }));
@@ -38,6 +43,40 @@ export const AdminDashboard = () => {
       setAllUsers([]);
       setFilteredUsers([]);
     }
+  };
+
+  const handleUpdateUser = async (alumniId, userData) => {
+    try {
+      // You'll need to implement this endpoint on your backend
+      await axios.put(`/update_user`, {
+        alumni_id: alumniId,
+        ...userData
+      }, {
+        withCredentials: true,
+      });
+      getAllUserData(); // Refresh the user list
+      setShowViewModal(false);
+    } catch (error) {
+      console.error("Failed to update user:", error);
+    }
+  };
+
+  // Search functionality
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    
+    if (term.trim() === "") {
+      setFilteredUsers(allUsers);
+    } else {
+      const filtered = allUsers.filter(user => 
+        (user.full_name && user.full_name.toLowerCase().includes(term)) || 
+        (user.alumni_id && user.alumni_id.toString().toLowerCase().includes(term)) ||
+        (user.college_department && user.college_department.toLowerCase().includes(term))
+      );
+      setFilteredUsers(filtered);
+    }
+    setCurrentPage(1); // Reset to first page on search
   };
 
   useEffect(() => {
@@ -107,6 +146,8 @@ export const AdminDashboard = () => {
                   className="form-control border-start-0"
                   placeholder="Search Alumni"
                   style={{ paddingLeft: "5px" }}
+                  value={searchTerm}
+                  onChange={handleSearch}
                 />
               </div>
 
@@ -124,7 +165,7 @@ export const AdminDashboard = () => {
                 </button>
                 <button
                   className="btn btn-success d-flex align-items-center gap-1 px-3 py-2"
-                  onClick={() => setShowAddAlumniModal(true)} // Open AddAlumniModal
+                  onClick={() => setShowAddAlumniModal(true)}
                 >
                   <img
                     src={UserAddIcon}
@@ -144,10 +185,9 @@ export const AdminDashboard = () => {
           {/* Add Alumni Modal */}
           {showAddAlumniModal && (
             <AddAlumniModal
-              onClose={() => setShowAddAlumniModal(false)} // Close the modal
-              onAddSuccess={(newUser) => {
-                setAllUsers((prev) => [...prev, newUser]);
-                setFilteredUsers((prev) => [...prev, newUser]);
+              onClose={() => setShowAddAlumniModal(false)}
+              onAddSuccess={() => {
+                getAllUserData(); // Refresh all data to ensure consistency
                 setShowAddAlumniModal(false);
               }}
             />
@@ -174,6 +214,7 @@ export const AdminDashboard = () => {
                       onFilterApply={(filteredData) => {
                         setFilteredUsers(filteredData);
                         setShowFilter(false);
+                        setCurrentPage(1); // Reset to first page when filtering
                       }}
                       initialData={allUsers}
                     />
@@ -183,12 +224,21 @@ export const AdminDashboard = () => {
             </div>
           )}
 
+          {showViewModal && (
+            <ViewUserModal
+              isOpen={showViewModal}
+              onClose={() => setShowViewModal(false)}
+              onSave={handleUpdateUser}
+              userId={selectedUserId}
+            />
+          )}
+
           {/* Table */}
           <div className="table-responsive rounded-3 overflow-hidden border">
             <table className="table table-hover mb-0">
               <thead className="bg-success text-white">
                 <tr>
-                  <th className="ps-4">ID</th>
+                  <th className="ps-4">#</th>
                   <th>Alumni ID</th>
                   <th>Full Name</th>
                   <th>College Dept.</th>
@@ -202,12 +252,12 @@ export const AdminDashboard = () => {
                 {paginatedUsers.length > 0 ? (
                   paginatedUsers.map((user, index) => (
                     <tr key={index}>
-                      <td className="ps-4">{user.ID}</td>
+                      <td className="ps-4">{(currentPage - 1) * rowsPerPage + index + 1}</td>
                       <td>{user.alumni_id}</td>
                       <td>{user.full_name}</td>
-                      <td>{user.college_department}</td>
+                      <td>{user.college_department || "-"}</td>
                       <td className="d-none d-md-table-cell">
-                        {user.year_graduated}
+                        {user.year_graduated || "-"}
                       </td>
                       <td className="d-none d-md-table-cell">
                         {user.batch || "-"}
@@ -218,11 +268,17 @@ export const AdminDashboard = () => {
                             user.role === "DEAN" ? "bg-primary" : "bg-secondary"
                           }`}
                         >
-                          {user.role}
+                          {user.role || "-"}
                         </span>
                       </td>
                       <td className="pe-4">
-                        <button className="btn btn-sm btn-outline-secondary">
+                        <button
+                          className="btn btn-sm btn-outline-secondary"
+                          onClick={() => {
+                            setSelectedUserId(user.alumni_id);
+                            setShowViewModal(true);
+                          }}
+                        >
                           <img
                             src={UserViewIcon}
                             alt="View"
@@ -246,9 +302,9 @@ export const AdminDashboard = () => {
           {/* Pagination */}
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div className="text-muted">
-              Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
-              {Math.min(currentPage * rowsPerPage, allUsers.length)} of{" "}
-              {allUsers.length} entries
+              Showing {filteredUsers.length === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1} to{" "}
+              {Math.min(currentPage * rowsPerPage, filteredUsers.length)} of{" "}
+              {filteredUsers.length} entries
             </div>
             <nav>
               <ul className="pagination pagination-sm mb-0">
@@ -281,7 +337,7 @@ export const AdminDashboard = () => {
                 )}
                 <li
                   className={`page-item ${
-                    currentPage === totalPages ? "disabled" : ""
+                    currentPage === totalPages || totalPages === 0 ? "disabled" : ""
                   }`}
                 >
                   <button
