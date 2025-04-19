@@ -44,7 +44,7 @@ export const AlumniNavbar = () => {
                 {/* Navbar Links & Logout Button */}
                 <Navbar.Collapse id="basic-navbar-nav" className="justify-content-center">
                     <Nav className="d-flex flex-column flex-lg-row align-items-lg-center gap-4 mx-auto">
-                        {["home", "profile", "about"].map((item) => (
+                        {["home", "profile", "department", "about"].map((item) => (
                             <div key={item} className="text-center">
                                 <Nav.Link
                                     as={Link}

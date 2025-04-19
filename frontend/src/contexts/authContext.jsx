@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   // Logout the user and remove them in local storage
-  const logout = () => {
+  const logout = async() => {
     setUser(null);
     localStorage.removeItem('user');
   }

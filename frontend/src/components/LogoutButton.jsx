@@ -7,14 +7,14 @@ export const Logout = () =>  {
     const { logout } = useAuthContext()
     const navigate = useNavigate();
 
-    const handeLogout = () => {
+    const handeLogout = async () => {
         const isLoggedOut = confirm("Are you sure you want to log out?");
         if(!isLoggedOut){
             return
         }
 
         // Logged out the user and route them back to logout
-        logout();
+        await logout();
         navigate('/login');
         toast.dismiss();
         toast.success("You have been successfully logged out");
