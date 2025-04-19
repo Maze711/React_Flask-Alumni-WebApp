@@ -9,8 +9,9 @@ import { Toaster } from 'react-hot-toast'; // for notification component
 import { AuthContextProvider } from './contexts/authContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Profile } from './pages/profile';
-import { About } from './pages/alumni/About';
+import { About } from './pages/about/About';
 import { AdminDashboard } from './pages/registrar/Dashboard';
+import { Department } from './pages/department/Department';
 
 function App() {
 
@@ -43,6 +44,8 @@ function App() {
           <Route path='/profile' element={<Profile />} />
           {/* Routes to About Page */}
           <Route path='/about' element={<About />} />
+          {/* Routes to Department Page */}
+          <Route path='/department' element={<Department />} />
         </Route>
 
       </Routes>

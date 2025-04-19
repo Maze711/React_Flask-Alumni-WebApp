@@ -46,3 +46,11 @@ body {
   font-family: "Inter", serif;
   font-weight: bold;
 }
+
+.create-post:hover {
+  background-color: #e7e7e7 !important;
+}
+
+.create-post-icon:hover{
+  background-color: #a7a5a5 !important;
+}
