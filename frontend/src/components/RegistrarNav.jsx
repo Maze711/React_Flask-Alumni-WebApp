@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import plmunLogo from "../assets/img/Pamantasan_ng_Lungsod_ng_Muntinlupa_logo 2.png";
 
 export const SideBar = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const location = useLocation();
+
+  // Get current path to highlight active nav item
+  const currentPath = location.pathname;
 
   // Handle responsive view and click outside
   useEffect(() => {
@@ -32,6 +36,11 @@ export const SideBar = () => {
   const toggleDropdown = (e) => {
     e.stopPropagation();
     setDropdownVisible(!isDropdownVisible);
+  };
+  
+  // Check if a path is active
+  const isActive = (path) => {
+    return currentPath === path;
   };
 
   // Mobile Header
@@ -76,14 +85,14 @@ export const SideBar = () => {
             {[
               { path: "/registrar", label: "INTERNAL USERS", bold: true },
               { path: "/profile", label: "PROFILE" },
-              { path: "/department", label: "DEPARTMENT" },
+              { path: "/registrar/department", label: "DEPARTMENT" }, // Updated path
               { path: "/about", label: "ABOUT" },
               { path: "/logout", label: "LOG OUT" }
             ].map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-white text-decoration-none p-3 ${item.bold ? "fw-bold" : ""}`}
+                className={`text-white text-decoration-none p-3 ${item.bold ? "fw-bold" : ""} ${isActive(item.path) ? "bg-success-dark" : ""}`}
                 onClick={() => setDropdownVisible(false)}
               >
                 {item.label}
@@ -115,10 +124,26 @@ export const SideBar = () => {
 
       <nav className="nav flex-column px-3 mb-auto">
         {[
-          { path: "/registrar", label: "INTERNAL USERS", style: "btn-success fw-bold" },
-          { path: "/profile", label: "PROFILE", style: "btn-outline-light" },
-          { path: "/department", label: "DEPARTMENT", style: "btn-outline-light" },
-          { path: "/about", label: "ABOUT", style: "btn-outline-light" }
+          { 
+            path: "/registrar", 
+            label: "INTERNAL USERS", 
+            style: isActive("/registrar") ? "btn-success fw-bold" : "btn-outline-light" 
+          },
+          { 
+            path: "/profile", 
+            label: "PROFILE", 
+            style: isActive("/profile") ? "btn-success fw-bold" : "btn-outline-light" 
+          },
+          { 
+            path: "/registrar/department", // Updated path
+            label: "DEPARTMENT", 
+            style: isActive("/registrar/department") ? "btn-success fw-bold" : "btn-outline-light" 
+          },
+          { 
+            path: "/about", 
+            label: "ABOUT", 
+            style: isActive("/about") ? "btn-success fw-bold" : "btn-outline-light" 
+          }
         ].map((item) => (
           <Link
             key={item.path}

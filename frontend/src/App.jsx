@@ -11,6 +11,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Profile } from './pages/profile';
 import { About } from './pages/about/About';
 import { AdminDashboard } from './pages/registrar/Dashboard';
+import { RegistrarDepartment } from './pages/registrar/Department'
 import { Department } from './pages/department/Department';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['DEAN']} />}>
           <Route path='/admin' element={<Dean />} />
           <Route path='/registrar' element={<AdminDashboard />} />
+          <Route path='/registrar/department' element={<RegistrarDepartment />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>\
           {/* Routes to Home Page */}
