@@ -54,3 +54,17 @@ body {
 .create-post-icon:hover{
   background-color: #a7a5a5 !important;
 }
+
+.create-post-icons {
+  cursor: pointer;
+  padding: 8px;
+}
+
+.create-post-icons img {
+  height: 30px;
+  width: 30px;
+}
+
+.create-post-icons:hover{
+  background-color: #a7a5a5 !important;
+}
