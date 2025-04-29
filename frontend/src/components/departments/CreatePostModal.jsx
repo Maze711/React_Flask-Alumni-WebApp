@@ -14,11 +14,11 @@ import PhotosIcon from "../../assets/icon/photos_ico.svg";
 import AddFileIcon from "../../assets/icon/add_file_ico.svg";
 import VideosIcon from "../../assets/icon/videos_ico.svg";
 import PollIcon from "../../assets/icon/poll_ico.svg";
-import { useState } from "react";
+import TrashIcon from "../../assets/icon/trash_ico.svg";
+import { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-export const CreatePostModal = ({ isOpen, onClose }) => {
-
+export const CreatePostModal = ({ isOpen, onClose, initialOption }) => {
   const [postInput, setPostInput] = useState({
     title: "",
     description: "",
@@ -28,6 +28,21 @@ export const CreatePostModal = ({ isOpen, onClose }) => {
 
   const [selectedOption, setSelectedOption] = useState([]);
 
+  const [pollOptions, setPollOptions] = useState([]);
+
+  // Ensures when the modal opens, adds corresponding type
+  useEffect(() => {
+    if (isOpen && initialOption) {
+      // Prevents to add another poll
+      if (initialOption === "Poll") {
+        if (selectedOption.includes("Poll")) return;
+        setPollOptions(["", ""]); // Start with two empty options
+      }
+
+      setSelectedOption((prev) => [...prev, initialOption]);
+    }
+  }, [isOpen, initialOption]);
+
   // Submit Post and saves it to database
   const handleSubmitPost = (e) => {
     // TODO: Soon to save the post contents to database through POST API
@@ -36,6 +51,10 @@ export const CreatePostModal = ({ isOpen, onClose }) => {
 
   // Adds a stack of upload file container
   const addSelectedOption = (type) => {
+    if (type === "Poll") {
+      if (selectedOption.includes("Poll")) return;
+      setPollOptions(["", ""]); // Start with two empty options
+    }
     setSelectedOption([...selectedOption, type]);
   };
 
@@ -51,6 +70,12 @@ export const CreatePostModal = ({ isOpen, onClose }) => {
     setSelectedOption(
       selectedOption.filter((_, index) => index !== indexToRemove)
     );
+  };
+
+  // Remove from poll options
+  const removePoll = (index) => {
+    const updated = pollOptions.filter((_, i) => i !== index);
+    setPollOptions(updated);
   };
 
   return (
@@ -97,25 +122,49 @@ export const CreatePostModal = ({ isOpen, onClose }) => {
                   >
                     {type == "Poll" ? (
                       /* Poll Container */
-                      // TODO: Create a dynamic addition and removal of polls
-                      // TODO: Add Poll functionality
-                      <div className="btn position-relative rounded d-flex flex-column align-items-center justify-content-center border w-100 bg-light pt-5 pb-3">
+                      <div className="btn position-relative rounded d-flex flex-column align-items-center justify-content-center border w-100 bg-light pt-3 pb-3">
                         <button
                           className="btn-close position-absolute bg-secondary rounded-circle p-2"
                           style={{ right: "5px", top: "5px" }}
                           onClick={() => handleDiscardFile(index)}
                         ></button>
-                        <input
-                          type="text"
-                          className="mb-2 w-100 p-1"
-                          placeholder="Poll Option 1"
-                        />
-                        <input
-                          type="text"
-                          className="mb-2 w-100 p-1"
-                          placeholder="Poll Option 2"
-                        />
-                        <button className="btn btn-sm btn-success w-100">
+                        <p>
+                          <b>Create a Poll</b>
+                        </p>
+                        {pollOptions.map((option, i) => (
+                          <div
+                            key={i}
+                            className="mb-2 w-100 d-flex align-items-center"
+                          >
+                            <input
+                              type="text"
+                              className="p-1 flex-grow-1"
+                              placeholder={`Poll Option ${i + 1}`}
+                              value={option}
+                              onChange={(e) => {
+                                const updated = [...pollOptions];
+                                updated[i] = e.target.value;
+                                setPollOptions(updated);
+                              }}
+                            />
+                            {/* Only adds remove button when the option is more than 1 */}
+                            {pollOptions.length > 1 && i !== 0 && (
+                              <button
+                                className="btn btn-light rounded"
+                                onClick={() => removePoll(i)}
+                              >
+                                <img
+                                  src={TrashIcon}
+                                  style={{
+                                    height: "25px",
+                                    width: "25px",
+                                  }}
+                                />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        <button className="btn btn-sm btn-success w-100" onClick={() => setPollOptions([...pollOptions, ""])}>
                           + Add Poll Option
                         </button>
                       </div>
