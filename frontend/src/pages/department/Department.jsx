@@ -12,6 +12,12 @@ export const Department = () => {
   // TODO: Make the Post and Announcement Iterable based on the fetched data from the backend
   
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [selectedModalType, setSelectedModalType] = useState(null);
+
+  const handleOpenModalWithType = (type) => {
+    setSelectedModalType(type)
+    setShowCreatePostModal(!showCreatePostModal)
+  }
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -45,7 +51,7 @@ export const Department = () => {
 
             <div className="d-flex justify-content-center gap-2 gap-sm-3">
               <button className="create-post-icon btn d-flex align-items-center gap-2 py-2 px-3"
-              onClick={() => setShowCreatePostModal(!showCreatePostModal)}
+              onClick={() => handleOpenModalWithType("Photo")}
               >
                 <img
                   src={PhotosIcon}
@@ -54,7 +60,7 @@ export const Department = () => {
                 <span className="fw-bold d-none d-sm-block">Photos</span>
               </button>
               <button className="create-post-icon btn d-flex align-items-center gap-2 py-2 px-3"
-                onClick={() => setShowCreatePostModal(!showCreatePostModal)}
+                onClick={() =>  handleOpenModalWithType("Video")}
                 >
                 <img
                   src={VideosIcon}
@@ -63,7 +69,7 @@ export const Department = () => {
                 <span className="fw-bold d-none d-sm-block">Video</span>
               </button>
               <button className="create-post-icon btn d-flex align-items-center gap-2 py-2 px-3"
-              onClick={() => setShowCreatePostModal(!showCreatePostModal)}
+              onClick={() =>  handleOpenModalWithType("Poll")}
               >
                 <img src={PollIcon} style={{ width: "30px", height: "30px" }} />
                 <span className="fw-bold d-none d-sm-block">Poll</span>
@@ -74,7 +80,11 @@ export const Department = () => {
           {/* Create Post Modal */}
           <CreatePostModal
             isOpen={showCreatePostModal}
-            onClose={() => setShowCreatePostModal(false)}
+            onClose={() => {
+              setSelectedModalType(null)
+              setShowCreatePostModal(false)
+            }}
+            initialOption={selectedModalType}
           />
 
           {/* List of Post */}
