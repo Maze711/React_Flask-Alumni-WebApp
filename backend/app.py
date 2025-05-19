@@ -4,12 +4,14 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from config.config import Config  # Import Config class
 from controller.login_controller import auth_bp  # Import auth_bp Blueprint
+from controller.signup_controller import signup_bp  # Import signup blueprint
 from config.config import config_bp  # Import config_bp Blueprint
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(signup_bp)
 app.register_blueprint(config_bp)
 
 
