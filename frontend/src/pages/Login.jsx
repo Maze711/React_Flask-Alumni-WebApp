@@ -156,6 +156,22 @@ export const Login = () => {
               }
               value={"Log in"}
             />
+            <div
+              style={{
+                marginTop: "10px",
+                fontWeight: "bold",
+                color: "black",
+                textAlign: "center",
+              }}
+            >
+              Don't Have Account Yet?{" "}
+              <span
+                style={{ color: "green", cursor: "pointer" }}
+                onClick={() => navigate("/signup")}
+              >
+                Sign Up here!
+              </span>
+            </div>
           </form>
         </MDBCol>
       </MDBRow>
