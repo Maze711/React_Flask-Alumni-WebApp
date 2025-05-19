@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Toaster } from 'react-hot-toast'; // for notification component
 import { AuthContextProvider } from './contexts/authContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { Profile } from './pages/profile';
+import { Profile } from './pages/Profile';
 import { About } from './pages/about/About';
 import { AdminDashboard } from './pages/registrar/Dashboard';
 import { RegistrarDepartment } from './pages/registrar/Department'
@@ -34,12 +34,12 @@ function App() {
         <Route path="/signup" element={<Signup />} />
 
         {/* Protected Routes (Needs to sign in to access) */}
-        <Route element={<ProtectedRoute allowedRoles={['DEAN']} />}>
-          <Route path='/admin' element={<Dean />} />
+        <Route element={<ProtectedRoute allowedRoles={['DEAN', 'REGISTRAR', 'ADMIN']} />}>
           <Route path='/registrar' element={<AdminDashboard />} />
           <Route path='/registrar/department' element={<RegistrarDepartment />} />
+          <Route path='/registrar/profile' element={<Profile />} /> {/* <-- Add this */}
         </Route>
-        <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>\
+        <Route element={<ProtectedRoute allowedRoles={['DEAN', 'ALUMNI']} />}>
           {/* Routes to Home Page */}
           <Route path='/home' element={<Home />} />
           {/* Routes to Profile Page */}

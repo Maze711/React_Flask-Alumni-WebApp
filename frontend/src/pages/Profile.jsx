@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MDBCol,
   MDBContainer,
@@ -9,41 +10,61 @@ import {
   MDBCardImage,
   MDBCardHeader,
 } from "mdb-react-ui-kit";
-
+import { SideBar as RegistrarNav } from "../components/RegistrarNav";
 import { AlumniNavbar } from "../components/NavBar";
-import axios from "axios";
 
 export const Profile = () => {
-  const alumni_id = JSON.parse(localStorage.getItem("user")).alumni_id;
+  const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const alumni_id = userData?.alumni_id;
   const [user, setUser] = useState({});
 
-  const getUserProfile = async () => {
-    // Gets the user profile
-    try {
-      const { data } = await axios.post("/fetch_user_profile", { alumni_id });
-      return data;
-    } catch (error) {
-      console.log(error);
-      throw error;
+  // Auth check for logged in users
+  useEffect(() => {
+    if (!userData) {
+      navigate("/login");
     }
+  }, [userData, navigate]);
+
+  const getUserProfile = async () => {
+    // Replace with your actual API call
+    // Example:
+    // const { data } = await axios.post("/fetch_user_profile", { alumni_id });
+    // return data;
+    return {
+      last_name: "Doe",
+      first_name: "John",
+      middle_name: "A.",
+      suffix: "",
+      job_title: "Registrar",
+      role: userData?.role,
+      alumni_id: alumni_id,
+      email: "john.doe@example.com",
+      gender: "Male",
+      number: "1234567890",
+      address: "123 Main St",
+      college_department: "Registrar Office",
+      year_graduated: "N/A",
+      civil_status: "Single",
+      work_status: "Active",
+    };
   };
 
   // Fetch all the user data based on the alumni_id
   useEffect(() => {
     getUserProfile()
-      .then((data) => {
-        setUser(data);
-        console.log("User Profile:", data);
-      })
-      .catch((error) => {
-        setUser({});
-        console.log(error);
-      });
+      .then((data) => setUser(data))
+      .catch(() => setUser({}));
   }, []);
+
+  // Determine which navbar to use
+  const role = userData?.role?.toLowerCase();
+  const showRegistrarNav =
+    role === "registrar" || role === "dean" || role === "admin";
 
   return (
     <MDBContainer fluid className="p-0 d-flex flex-column vh-100">
-      <AlumniNavbar />
+      {showRegistrarNav ? <RegistrarNav /> : <AlumniNavbar />}
       <section style={{ backgroundColor: "#eee" }} className="flex-grow-1">
         <MDBContainer className="profile-container">
           <MDBRow>
@@ -58,9 +79,12 @@ export const Profile = () => {
                     style={{ width: "150px" }}
                     fluid
                   />
-                  <h4 className=" mb-1" style={{
-              color: "rgb(25, 59, 2)",
-            }}>
+                  <h4
+                    className=" mb-1"
+                    style={{
+                      color: "rgb(25, 59, 2)",
+                    }}
+                  >
                     {user.last_name +
                       ", " +
                       user.first_name +

@@ -75,7 +75,7 @@ def signup():
         cursor.execute(insert_secondary, (
             new_alumni_id,
             data.get("college_department") or "",
-            data.get("year_graduated") or "",
+            data.get("year_graduated") or "2014",  # Default to 2014 if not provided
             data.get("civil_status") or "",
             data.get("work_status") or "",
             data.get("job_title") or "",
