@@ -45,8 +45,21 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem('user');
   }
 
+  const registerUser = async (userData) => {
+    try {
+      const { data } = await axios.post("/api/signup", userData);
+      return data;
+    } catch (error) {
+      console.dir(error, { depth: null });
+      if (axios.isAxiosError(error) && error.response) {
+        throw error;
+      }
+    }
+  };
+
   const values = {
     loginUser,
+    registerUser,
     user,
     logout
   };
