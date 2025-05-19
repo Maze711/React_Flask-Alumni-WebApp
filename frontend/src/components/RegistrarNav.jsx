@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Add useNavigate
 import plmunLogo from "../assets/img/Pamantasan_ng_Lungsod_ng_Muntinlupa_logo 2.png";
 
 export const SideBar = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate(); // Add this
 
   // Get current path to highlight active nav item
   const currentPath = location.pathname;
@@ -41,6 +42,12 @@ export const SideBar = () => {
   // Check if a path is active
   const isActive = (path) => {
     return currentPath === path;
+  };
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   // Mobile Header
@@ -84,9 +91,9 @@ export const SideBar = () => {
           <div className="d-flex flex-column">
             {[
               { path: "/registrar", label: "INTERNAL USERS", bold: true },
-              { path: "/profile", label: "PROFILE" },
-              { path: "/registrar/department", label: "DEPARTMENT" }, // Updated path
-              { path: "/about", label: "ABOUT" },
+              { path: "/registrar/profile", label: "PROFILE" }, // Changed path
+              { path: "/registrar/department", label: "DEPARTMENT" },
+              { path: "/registrar/about", label: "ABOUT" }, // Changed path
               { path: "/logout", label: "LOG OUT" }
             ].map((item) => (
               <Link
@@ -130,19 +137,19 @@ export const SideBar = () => {
             style: isActive("/registrar") ? "btn-success fw-bold" : "btn-outline-light" 
           },
           { 
-            path: "/profile", 
+            path: "/registrar/profile", // Changed path
             label: "PROFILE", 
-            style: isActive("/profile") ? "btn-success fw-bold" : "btn-outline-light" 
+            style: isActive("/registrar/profile") ? "btn-success fw-bold" : "btn-outline-light" 
           },
           { 
-            path: "/registrar/department", // Updated path
+            path: "/registrar/department", 
             label: "DEPARTMENT", 
             style: isActive("/registrar/department") ? "btn-success fw-bold" : "btn-outline-light" 
           },
           { 
-            path: "/about", 
+            path: "/registrar/about", // Changed path
             label: "ABOUT", 
-            style: isActive("/about") ? "btn-success fw-bold" : "btn-outline-light" 
+            style: isActive("/registrar/about") ? "btn-success fw-bold" : "btn-outline-light" 
           }
         ].map((item) => (
           <Link
@@ -157,9 +164,12 @@ export const SideBar = () => {
       </nav>
 
       <div className="p-3 text-center">
-        <Link to="/logout" className="btn btn-outline-light rounded-pill px-4 border-0">
+        <button
+          className="btn btn-outline-light rounded-pill px-4 border-0"
+          onClick={handleLogout}
+        >
           LOG OUT
-        </Link>
+        </button>
       </div>
     </aside>
   );

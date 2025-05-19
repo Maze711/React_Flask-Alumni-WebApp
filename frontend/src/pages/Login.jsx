@@ -27,7 +27,7 @@ export const Login = () => {
       setInput({ alumni_id: "", password: "" }); // Reset input fields
       const user_role = data.role;
       // routes the user to specific page based on their role
-      navigate(user_role === "DEAN" ? "/admin" : "/home");
+      navigate(user_role === "DEAN" ? "/registrar/department" : "/home");
       toast.dismiss();
       toast.success(data.message);
     } catch (error) {
